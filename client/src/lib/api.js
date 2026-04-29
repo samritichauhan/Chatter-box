@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://chatterbox-thuu.onrender.com";
+
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: `${API_URL}/api`,
   withCredentials: true,
 });
 
