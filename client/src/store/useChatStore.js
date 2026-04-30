@@ -167,6 +167,17 @@ const useChatStore = create((set, get) => ({
       unreadCounts: { ...state.unreadCounts, [conversationId]: count },
     }));
   },
+
+  clearMessages: (conversationId) => {
+    set((state) => ({
+      messages: [],
+      conversations: state.conversations.map((c) =>
+        c._id === conversationId
+          ? { ...c, lastMessage: null, updatedAt: new Date() }
+          : c
+      ),
+    }));
+  },
 }));
 
 export default useChatStore;

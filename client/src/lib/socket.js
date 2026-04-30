@@ -8,4 +8,16 @@ const socket = io(SOCKET_URL, {
   autoConnect: false,
 });
 
+socket.on("connect", () => {
+  console.log("[Socket] Connected to server, socketId:", socket.id);
+});
+
+socket.on("connect_error", (error) => {
+  console.error("[Socket] Connection error:", error);
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("[Socket] Disconnected from server, reason:", reason);
+});
+
 export default socket;

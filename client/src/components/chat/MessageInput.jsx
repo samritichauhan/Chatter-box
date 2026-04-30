@@ -115,23 +115,24 @@ const MessageInput = ({ replyTo, onCancelReply }) => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto";
-      textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+      textarea.style.height = Math.min(textarea.scrollHeight, 80) + "px";
     }
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white border-t border-gray-100">
       {replyTo && !recorderActive && (
-        <div className="pt-2 border-t border-gray-100">
+        <div className="px-4 pt-2 pb-0 border-b border-gray-100">
           <ReplyPreview message={replyTo} onCancel={onCancelReply} />
         </div>
       )}
 
-      {recorderActive ? (
-        /* Recorder takes over full input bar */
-        <VoiceRecorder onSend={handleFileUpload} onActiveChange={setRecorderActive} />
-      ) : (
-        <div className="flex items-end gap-2 px-4 py-3 border-t border-gray-100">
+      {/* Always render VoiceRecorder in same location to preserve state */}
+      <VoiceRecorder onSend={handleFileUpload} onActiveChange={setRecorderActive} />
+
+      {/* Text input area - only show when recorder is not active */}
+      {!recorderActive && (
+        <div className="flex items-end gap-2 px-4 py-3">
           <div className="relative">
             <button
               onClick={() => {
@@ -179,8 +180,8 @@ const MessageInput = ({ replyTo, onCancelReply }) => {
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             rows={1}
-            className="flex-1 px-4 py-2.5 rounded-2xl bg-gray-50 border border-gray-200 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-purple-300 focus:ring-2 focus:ring-purple-100 resize-none transition-all"
-            style={{ maxHeight: "120px" }}
+            className="flex-1 px-4 py-2.5 rounded-2xl bg-gray-50 border border-gray-200 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-purple-300 focus:ring-2 focus:ring-purple-100 resize-none transition-all overflow-y-auto"
+            style={{ maxHeight: "80px", minHeight: "40px" }}
           />
 
           {text.trim() ? (
@@ -195,9 +196,7 @@ const MessageInput = ({ replyTo, onCancelReply }) => {
                 <Send className="w-5 h-5" />
               )}
             </button>
-          ) : (
-            <VoiceRecorder onSend={handleFileUpload} onActiveChange={setRecorderActive} />
-          )}
+          ) : null}
         </div>
       )}
 

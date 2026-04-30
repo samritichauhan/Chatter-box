@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Mic, Video, Square, Send, X, Play, Pause } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import AudioVisualizer from "./AudioVisualizer";
 
 const VoiceRecorder = ({ onSend, onActiveChange }) => {
   const [mode, setMode] = useState(null); // null | "audio" | "video"
@@ -243,28 +244,13 @@ const VoiceRecorder = ({ onSend, onActiveChange }) => {
             </div>
           </div>
         ) : (
-          <div className="flex-1 flex items-center gap-3 px-4 py-2 rounded-2xl bg-gradient-to-r from-red-50 to-pink-50 border border-red-100">
+          <div className="flex-1 flex items-center gap-3">
             <span className="relative flex h-2.5 w-2.5 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
             </span>
-            {/* Animated bars */}
-            <div className="flex items-end gap-[2px] h-6 flex-1">
-              {Array.from({ length: 32 }).map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="w-[2.5px] rounded-full bg-red-400"
-                  animate={{ height: [4, 8 + Math.random() * 14, 4] }}
-                  transition={{
-                    duration: 0.5 + Math.random() * 0.4,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    delay: i * 0.03,
-                  }}
-                />
-              ))}
-            </div>
-            <span className="text-sm font-mono font-semibold text-red-500 tracking-wider shrink-0">
+            <AudioVisualizer stream={streamRef.current} isRecording={true} />
+            <span className="text-sm font-mono font-semibold text-red-500 tracking-wider shrink-0 w-12 text-right">
               {formatDuration(duration)}
             </span>
           </div>

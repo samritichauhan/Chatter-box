@@ -43,14 +43,17 @@ const useCallStore = create((set, get) => ({
   },
 
   initiateCall: async (targetUser, callType) => {
+    console.log("[CallStore] Initiating", callType, "call to:", targetUser.fullName);
     let stream;
     try {
+      console.log("[CallStore] Requesting camera/microphone access...");
       stream = await navigator.mediaDevices.getUserMedia({
         video: callType === "video",
         audio: true,
       });
+      console.log("[CallStore] Media access granted");
     } catch (err) {
-      console.error("Media access error:", err);
+      console.error("[CallStore] Media access error:", err);
       if (err.name === "NotAllowedError") {
         alert("Camera/microphone permission denied. Please allow access in your browser settings and try again.");
       } else if (err.name === "NotFoundError") {
@@ -64,6 +67,7 @@ const useCallStore = create((set, get) => ({
     }
 
     try {
+      console.log("[CallStore] Creating SimplePeer instance...");
       const SimplePeer = await getSimplePeer();
       const peer = new SimplePeer({
         initiator: true,
@@ -77,6 +81,7 @@ const useCallStore = create((set, get) => ({
       peer.on("signal", (signal) => {
         if (!offerSent) {
           offerSent = true;
+          console.log("[CallStore] Sending SDP offer");
           const me = useAuthStore.getState().user;
           socket.emit("call:initiate", {
             to: targetUser._id,
@@ -85,6 +90,7 @@ const useCallStore = create((set, get) => ({
             from: { _id: me._id, fullName: me.fullName, avatar: me.avatar },
           });
         } else {
+          console.log("[CallStore] Sending ICE candidate");
           socket.emit("call:ice-candidate", {
             to: targetUser._id,
             candidate: signal,
@@ -93,11 +99,13 @@ const useCallStore = create((set, get) => ({
       });
 
       peer.on("stream", (remoteStream) => {
+        console.log("[CallStore] Received remote stream");
         set({ remoteStream });
       });
 
       peer.on("error", (err) => {
-        console.error("Peer connection error:", err);
+        console.error("[CallStore] Peer connection error:", err);
+        alert("Call connection error: " + err.message);
         get().endCall();
       });
 
@@ -109,23 +117,27 @@ const useCallStore = create((set, get) => ({
         peer,
         incomingSignal: null,
       });
+      console.log("[CallStore] Call initiated, waiting for response");
     } catch (err) {
-      console.error("Call setup error:", err);
+      console.error("[CallStore] Call setup error:", err);
       stream.getTracks().forEach((t) => t.stop());
       alert("Failed to set up the call: " + err.message);
     }
   },
 
   acceptCall: async () => {
+    console.log("[CallStore] Accepting call...");
     const state = get();
     let stream;
     try {
+      console.log("[CallStore] Requesting camera/microphone access...");
       stream = await navigator.mediaDevices.getUserMedia({
         video: state.callType === "video",
         audio: true,
       });
+      console.log("[CallStore] Media access granted for incoming call");
     } catch (err) {
-      console.error("Media access error:", err);
+      console.error("[CallStore] Media access error:", err);
       if (err.name === "NotAllowedError") {
         alert("Camera/microphone permission denied. Please allow access in your browser settings.");
       } else if (err.name === "NotReadableError") {
@@ -138,6 +150,7 @@ const useCallStore = create((set, get) => ({
     }
 
     try {
+      console.log("[CallStore] Creating SimplePeer instance for incoming call...");
       const SimplePeer = await getSimplePeer();
       const peer = new SimplePeer({
         initiator: false,
@@ -151,11 +164,13 @@ const useCallStore = create((set, get) => ({
       peer.on("signal", (signal) => {
         if (!answerSent) {
           answerSent = true;
+          console.log("[CallStore] Sending SDP answer");
           socket.emit("call:accept", {
             to: state.callUser._id,
             signal,
           });
         } else {
+          console.log("[CallStore] Sending ICE candidate from answerer");
           socket.emit("call:ice-candidate", {
             to: state.callUser._id,
             candidate: signal,
@@ -164,22 +179,27 @@ const useCallStore = create((set, get) => ({
       });
 
       peer.on("stream", (remoteStream) => {
+        console.log("[CallStore] Received remote stream from initiator");
         set({ remoteStream });
       });
 
       peer.on("error", (err) => {
-        console.error("Peer connection error:", err);
+        console.error("[CallStore] Peer connection error:", err);
         get().endCall();
       });
 
       // Feed the stored offer to the peer — triggers signal event above
       if (state.incomingSignal) {
+        console.log("[CallStore] Signaling peer with stored offer");
         peer.signal(state.incomingSignal);
+      } else {
+        console.warn("[CallStore] No incoming signal found!");
       }
 
       set({ callState: "ongoing", localStream: stream, peer });
+      console.log("[CallStore] Call accepted successfully");
     } catch (err) {
-      console.error("Call setup error:", err);
+      console.error("[CallStore] Call setup error:", err);
       stream.getTracks().forEach((t) => t.stop());
       alert("Failed to set up the call: " + err.message);
       get().rejectCall();

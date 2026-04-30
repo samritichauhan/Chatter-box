@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 import MessageBubble from "./MessageBubble";
 import DateSeparator from "./DateSeparator";
 import TypingIndicator from "./TypingIndicator";
@@ -79,11 +80,25 @@ const MessageContainer = ({ onReply, wallpaperStyle }) => {
           </div>
         )}
 
-        {groupedMessages.map((item) =>
+        {groupedMessages.map((item, index) =>
           item.type === "date" ? (
-            <DateSeparator key={item.key} date={item.date} />
+            <motion.div
+              key={item.key}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <DateSeparator date={item.date} />
+            </motion.div>
           ) : (
-            <MessageBubble key={item.key} message={item.data} onReply={onReply} />
+            <motion.div
+              key={item.key}
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: index * 0.05, duration: 0.3 }}
+            >
+              <MessageBubble message={item.data} onReply={onReply} />
+            </motion.div>
           )
         )}
 

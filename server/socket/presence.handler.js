@@ -2,6 +2,7 @@ import User from "../models/User.model.js";
 
 export default function presenceHandler(io, socket) {
   socket.on("user:online", async ({ userId }) => {
+    console.log(`[Presence] User online: ${userId} (socketId: ${socket.id})`);
     socket.userId = userId;
     socket.join(userId);
 
@@ -27,6 +28,7 @@ export default function presenceHandler(io, socket) {
 
   socket.on("disconnect", async () => {
     if (socket.userId) {
+      console.log(`[Presence] User offline: ${socket.userId}`);
       await User.findByIdAndUpdate(socket.userId, {
         isOnline: false,
         lastSeen: new Date(),

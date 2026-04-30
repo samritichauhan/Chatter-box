@@ -77,10 +77,14 @@ const ChatArea = ({ onBack }) => {
   if (!selectedConversation) return <NoChatSelected />;
 
   return (
-    <div className="flex-1 flex flex-col h-full relative">
+    <div className="flex-1 flex flex-col h-full relative overflow-hidden">
       <ChatHeader onBack={onBack} onWallpaper={() => setShowWallpaperPicker(true)} />
-      <MessageContainer onReply={setReplyTo} wallpaperStyle={wallpaperStyle} />
-      <MessageInput replyTo={replyTo} onCancelReply={() => setReplyTo(null)} />
+      <div className="flex-1 overflow-y-auto min-h-0">
+        <MessageContainer onReply={setReplyTo} wallpaperStyle={wallpaperStyle} />
+      </div>
+      <div className="flex-shrink-0">
+        <MessageInput replyTo={replyTo} onCancelReply={() => setReplyTo(null)} />
+      </div>
 
       <WallpaperPicker
         isOpen={showWallpaperPicker}
