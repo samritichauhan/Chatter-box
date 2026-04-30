@@ -4,6 +4,7 @@ import { useState } from "react";
 import Avatar from "../common/Avatar";
 import OnlineDot from "../common/OnlineDot";
 import ContactInfoPanel from "./ContactInfoPanel";
+import SearchPanel from "./SearchPanel";
 import useChatStore from "../../store/useChatStore";
 import useAuthStore from "../../store/useAuthStore";
 import useCallStore from "../../store/useCallStore";
@@ -16,6 +17,7 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [showInfoPanel, setShowInfoPanel] = useState(false);
+  const [showSearchPanel, setShowSearchPanel] = useState(false);
 
   if (!selectedConversation) return null;
 
@@ -72,7 +74,7 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
       icon: Search,
       label: "Search in chat",
       action: () => {
-        toast.success("Search feature coming soon!");
+        setShowSearchPanel(true);
         setShowMenu(false);
       },
       color: "text-indigo-500",
@@ -194,6 +196,11 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
         onClose={() => setShowInfoPanel(false)}
         conversation={selectedConversation}
         isCurrentUser={false}
+      />
+
+      <SearchPanel
+        isOpen={showSearchPanel}
+        onClose={() => setShowSearchPanel(false)}
       />
     </div>
   );
