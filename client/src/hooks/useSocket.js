@@ -28,6 +28,13 @@ const useSocket = () => {
       useChatStore.getState().updateMessage(message);
     });
 
+    socket.on("message:cleared", ({ conversationId }) => {
+      // Only clear if it's the current conversation
+      if (conversationId === selectedConversation?._id) {
+        useChatStore.setState({ messages: [] });
+      }
+    });
+
     socket.on("message:reacted", ({ messageId, reactions }) => {
       const messages = useChatStore.getState().messages;
       const msg = messages.find((m) => m._id === messageId);
@@ -70,13 +77,14 @@ const useSocket = () => {
       socket.off("message:received");
       socket.off("message:deleted");
       socket.off("message:edited");
+      socket.off("message:cleared");
       socket.off("message:reacted");
       socket.off("message:read");
       socket.off("user:statusChanged");
       socket.off("user:typing");
       socket.off("user:stopTyping");
     };
-  }, [user]);
+  }, [user, selectedConversation?._id]);
 
   // Join/leave conversation rooms
   useEffect(() => {

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Avatar from "../common/Avatar";
 import OnlineDot from "../common/OnlineDot";
+import ContactInfoPanel from "./ContactInfoPanel";
 import useChatStore from "../../store/useChatStore";
 import useAuthStore from "../../store/useAuthStore";
 import useCallStore from "../../store/useCallStore";
@@ -14,6 +15,7 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
   const { user } = useAuthStore();
   const [showMenu, setShowMenu] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [showInfoPanel, setShowInfoPanel] = useState(false);
 
   if (!selectedConversation) return null;
 
@@ -42,9 +44,9 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
     return "";
   };
 
-  const handleClearChat = () => {
+  const handleClearChat = async () => {
     if (window.confirm("Are you sure you want to clear all messages? This cannot be undone.")) {
-      clearMessages(selectedConversation._id);
+      await clearMessages(selectedConversation._id);
       toast.success("Chat history cleared");
       setShowMenu(false);
     }
@@ -61,7 +63,7 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
       icon: Info,
       label: selectedConversation.type === "group" ? "Group Info" : "Contact Info",
       action: () => {
-        toast.success("Opening conversation details...");
+        setShowInfoPanel(true);
         setShowMenu(false);
       },
       color: "text-blue-500",
@@ -186,6 +188,13 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
           </AnimatePresence>
         </div>
       </div>
+
+      <ContactInfoPanel
+        isOpen={showInfoPanel}
+        onClose={() => setShowInfoPanel(false)}
+        conversation={selectedConversation}
+        isCurrentUser={false}
+      />
     </div>
   );
 };

@@ -70,7 +70,7 @@ const MessageContainer = ({ onReply, wallpaperStyle }) => {
         )}
 
         {!isLoadingMessages && messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center px-4">
+          <div className="flex flex-col items-center justify-start pt-8 text-center px-4">
             <div className="w-24 h-24 rounded-full bg-white shadow-soft flex items-center justify-center mb-4">
               <span className="text-4xl">💬</span>
             </div>

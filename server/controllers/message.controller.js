@@ -214,3 +214,26 @@ export const markAsRead = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const clearMessages = async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+
+    // Delete all messages in the conversation
+    await Message.deleteMany({ conversationId });
+
+    // Update conversation's lastMessage to null
+    await Conversation.findByIdAndUpdate(
+      conversationId,
+      { lastMessage: null, updatedAt: new Date() },
+      { new: true }
+    );
+
+    const io = getIO();
+    io.to(conversationId).emit("message:cleared", { conversationId });
+
+    res.json({ message: "All messages cleared" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

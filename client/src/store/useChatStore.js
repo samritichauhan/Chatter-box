@@ -168,15 +168,20 @@ const useChatStore = create((set, get) => ({
     }));
   },
 
-  clearMessages: (conversationId) => {
-    set((state) => ({
-      messages: [],
-      conversations: state.conversations.map((c) =>
-        c._id === conversationId
-          ? { ...c, lastMessage: null, updatedAt: new Date() }
-          : c
-      ),
-    }));
+  clearMessages: async (conversationId) => {
+    try {
+      await api.delete(`/messages/clear/${conversationId}`);
+      set((state) => ({
+        messages: [],
+        conversations: state.conversations.map((c) =>
+          c._id === conversationId
+            ? { ...c, lastMessage: null, updatedAt: new Date() }
+            : c
+        ),
+      }));
+    } catch (error) {
+      console.error("Error clearing messages:", error);
+    }
   },
 }));
 
