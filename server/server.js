@@ -61,11 +61,18 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: err.message || "Server error" });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
+// Initialize database and export app
+connectDB().catch((err) => {
+  console.error("Failed to connect to database:", err);
+});
 
-connectDB().then(() => {
+// Export app for Vercel serverless functions
+export default app;
+
+// Local development: start server
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
   httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-});
+}
