@@ -18,6 +18,9 @@ import callRoutes from "./routes/call.routes.js";
 const app = express();
 const httpServer = createServer(app);
 
+// Trust proxy for Vercel (handles X-Forwarded-For header)
+app.set('trust proxy', 1);
+
 // Socket.io
 const io = initSocket(httpServer);
 setupSocket(io);
