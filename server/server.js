@@ -18,8 +18,8 @@ import callRoutes from "./routes/call.routes.js";
 const app = express();
 const httpServer = createServer(app);
 
-// Trust proxy for Vercel (handles X-Forwarded-For header)
-app.set('trust proxy', 1);
+// Trust proxy (Render / reverse proxies)
+app.set("trust proxy", 1);
 
 // Socket.io
 const io = initSocket(httpServer);
@@ -28,12 +28,11 @@ setupSocket(io);
 // Middleware
 app.use(helmet());
 
-// CORS configuration for both development and production
+// CORS — allow the Vercel frontend + localhost dev
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
   process.env.CLIENT_URL,
-  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
 ].filter(Boolean);
 
 app.use(
@@ -64,18 +63,15 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message: err.message || "Server error" });
 });
 
-// Initialize database and export app
-connectDB().catch((err) => {
-  console.error("Failed to connect to database:", err);
-});
+// Connect DB and start server
+const PORT = process.env.PORT || 5000;
 
-// Export app for Vercel serverless functions
-export default app;
-
-// Local development: start server
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  httpServer.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+connectDB()
+  .then(() => {
+    httpServer.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to connect to database:", err);
   });
-}

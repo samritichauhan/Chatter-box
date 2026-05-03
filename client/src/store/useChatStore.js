@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import api from "../lib/api";
 
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  (import.meta.env.MODE === "development" ? "http://localhost:5000" : "");
+
 const useChatStore = create((set, get) => ({
   conversations: [],
   selectedConversation: null,
@@ -63,7 +67,7 @@ const useChatStore = create((set, get) => ({
     if (data instanceof FormData) {
       // Use native fetch for file uploads — axios can corrupt the multipart
       // boundary by injecting a Content-Type header before the browser sets it.
-      const res = await fetch("/api/messages", {
+      const res = await fetch(`${BACKEND_URL}/api/messages`, {
         method: "POST",
         body: data,
         credentials: "include",

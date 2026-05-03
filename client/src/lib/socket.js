@@ -1,9 +1,10 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ||
-  (import.meta.env.MODE === "development" ? "http://localhost:5000" : window.location.origin);
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  (import.meta.env.MODE === "development" ? "http://localhost:5000" : "");
 
-const socket = io(SOCKET_URL, {
+const socket = io(BACKEND_URL, {
   withCredentials: true,
   autoConnect: false,
 });
