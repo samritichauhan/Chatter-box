@@ -29,10 +29,12 @@ setupSocket(io);
 app.use(helmet());
 
 // CORS — allow the Vercel frontend + localhost dev
+// CLIENT_URL can be comma-separated for multiple frontends:
+// e.g. "https://app1.vercel.app,https://app2.vercel.app"
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
-  process.env.CLIENT_URL,
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",").map((u) => u.trim()) : []),
 ].filter(Boolean);
 
 app.use(

@@ -3,12 +3,10 @@ import { Server } from "socket.io";
 let io;
 
 export const initSocket = (httpServer) => {
-  // CORS configuration for both development and production
   const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    process.env.CLIENT_URL,
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+    ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",").map((u) => u.trim()) : []),
   ].filter(Boolean);
 
   io = new Server(httpServer, {
