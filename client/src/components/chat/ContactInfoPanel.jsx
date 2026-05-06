@@ -78,10 +78,10 @@ const ContactInfoPanel = ({ isOpen, onClose, conversation, isCurrentUser }) => {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 400, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl z-50 overflow-y-auto"
+            className="info-panel fixed right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl z-50 overflow-y-auto"
           >
             {/* Header */}
-            <div className="sticky top-0 flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
+            <div className="info-section sticky top-0 flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
               <h2 className="font-semibold text-gray-800">
                 {isCurrentUser ? "Your Profile" : "Contact Info"}
               </h2>
@@ -137,15 +137,15 @@ const ContactInfoPanel = ({ isOpen, onClose, conversation, isCurrentUser }) => {
 
                 {/* About */}
                 {displayUser.about && (
-                  <div className="p-3 bg-gray-50 rounded-lg">
+                  <div className="about-box p-3 bg-gray-50 rounded-lg">
                     <p className="text-sm text-gray-700">{displayUser.about}</p>
                   </div>
                 )}
 
                 {/* Contact Details */}
-                <div className="space-y-3 pt-4 border-t border-gray-100">
+                <div className="info-section space-y-3 pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-purple-100">
+                    <div className="detail-icon p-2 rounded-lg bg-purple-100">
                       <Mail className="w-5 h-5 text-purple-600" />
                     </div>
                     <div>
@@ -156,7 +156,7 @@ const ContactInfoPanel = ({ isOpen, onClose, conversation, isCurrentUser }) => {
 
                   {displayUser.phone && (
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100">
+                      <div className="detail-icon p-2 rounded-lg bg-blue-100">
                         <Phone className="w-5 h-5 text-blue-600" />
                       </div>
                       <div>
@@ -168,7 +168,7 @@ const ContactInfoPanel = ({ isOpen, onClose, conversation, isCurrentUser }) => {
 
                   {displayUser.lastSeen && (
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-green-100">
+                      <div className="detail-icon p-2 rounded-lg bg-green-100">
                         <Calendar className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
@@ -184,13 +184,13 @@ const ContactInfoPanel = ({ isOpen, onClose, conversation, isCurrentUser }) => {
 
               {/* Group Members (if group chat) */}
               {!isPrivate && (
-                <div className="pt-4 border-t border-gray-100">
+                <div className="info-section pt-4 border-t border-gray-100">
                   <h4 className="font-semibold text-gray-900 mb-3">Members</h4>
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {conversation.participants.map((member) => (
                       <div
                         key={member._id}
-                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50"
+                        className="member-item flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50"
                       >
                         <img
                           src={
@@ -204,7 +204,9 @@ const ContactInfoPanel = ({ isOpen, onClose, conversation, isCurrentUser }) => {
                           <p className="text-sm font-medium text-gray-900 truncate">
                             {member.fullName}
                           </p>
-                          <p className="text-xs text-gray-500">@{member.username}</p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {member.email || `@${member.username}`}
+                          </p>
                         </div>
                       </div>
                     ))}

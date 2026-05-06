@@ -4,12 +4,12 @@ const ReplyPreview = ({ message, onCancel }) => {
   if (!message) return null;
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 border-l-3 border-purple-500 mx-4 rounded-lg">
+    <div className="reply-preview flex items-center gap-2 px-4 py-2 bg-purple-50 border-l-3 border-purple-500 mx-4 rounded-lg">
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-purple-600">
+        <p className="reply-author text-xs font-semibold text-purple-600">
           {message.sender?.fullName || "Unknown"}
         </p>
-        <p className="text-xs text-gray-500 truncate">
+        <p className="reply-text text-xs text-gray-500 truncate">
           {message.content || "Media"}
         </p>
       </div>

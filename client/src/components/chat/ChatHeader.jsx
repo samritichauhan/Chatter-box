@@ -1,4 +1,4 @@
-import { Phone, Video, MoreVertical, ArrowLeft, Palette, Trash2, Bell, BellOff, Info, Search } from "lucide-react";
+import { Phone, Video, MoreVertical, ArrowLeft, Palette, Trash2, Bell, BellOff, Info, Search, UserX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Avatar from "../common/Avatar";
@@ -12,7 +12,7 @@ import { getConversationName, getConversationAvatar, getOtherParticipant, format
 import toast from "react-hot-toast";
 
 const ChatHeader = ({ onBack, onWallpaper }) => {
-  const { selectedConversation, onlineUsers, typingUsers, clearMessages } = useChatStore();
+  const { selectedConversation, onlineUsers, typingUsers, clearMessages, deleteConversation } = useChatStore();
   const { user } = useAuthStore();
   const [showMenu, setShowMenu] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -54,6 +54,21 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
     }
   };
 
+  const handleDeleteConversation = async () => {
+    const label = selectedConversation.type === "private"
+      ? `Remove ${name} from your chats? This will delete the entire conversation.`
+      : "Delete this group conversation? This cannot be undone.";
+    if (window.confirm(label)) {
+      const success = await deleteConversation(selectedConversation._id);
+      if (success) {
+        toast.success("Conversation removed");
+        setShowMenu(false);
+      } else {
+        toast.error("Failed to remove conversation");
+      }
+    }
+  };
+
   const handleToggleMute = () => {
     setIsMuted(!isMuted);
     toast.success(isMuted ? "Notifications enabled" : "Notifications muted");
@@ -91,10 +106,16 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
       action: handleClearChat,
       color: "text-red-500",
     },
+    {
+      icon: UserX,
+      label: selectedConversation.type === "private" ? "Remove person" : "Delete conversation",
+      action: handleDeleteConversation,
+      color: "text-red-600",
+    },
   ];
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shadow-sm">
+    <div className="chat-header flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shadow-sm">
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
@@ -171,7 +192,7 @@ const ChatHeader = ({ onBack, onWallpaper }) => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: -10 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-40"
+                  className="dropdown-menu absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-40"
                 >
                   {menuItems.map((item, index) => (
                     <motion.button

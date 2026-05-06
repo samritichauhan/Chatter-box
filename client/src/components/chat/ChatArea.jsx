@@ -17,7 +17,7 @@ const getStoredWallpapers = () => {
 };
 
 const NoChatSelected = () => (
-  <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-purple-50/30 text-center px-4">
+  <div className="no-chat-bg flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-purple-50/30 text-center px-4">
     <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center mb-6 shadow-glow">
       <MessageSquare className="w-14 h-14 text-white" />
     </div>
@@ -29,22 +29,22 @@ const NoChatSelected = () => (
     </p>
     <div className="flex items-center gap-6 mt-8">
       <div className="flex flex-col items-center gap-1">
-        <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+        <div className="feature-icon w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
           <span className="text-lg">💬</span>
         </div>
-        <span className="text-[10px] text-gray-400">Chat</span>
+        <span className="feature-label text-[10px] text-gray-400">Chat</span>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
+        <div className="feature-icon w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
           <span className="text-lg">📷</span>
         </div>
-        <span className="text-[10px] text-gray-400">Media</span>
+        <span className="feature-label text-[10px] text-gray-400">Media</span>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+        <div className="feature-icon w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
           <span className="text-lg">📞</span>
         </div>
-        <span className="text-[10px] text-gray-400">Calls</span>
+        <span className="feature-label text-[10px] text-gray-400">Calls</span>
       </div>
     </div>
   </div>

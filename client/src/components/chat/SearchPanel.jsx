@@ -36,10 +36,10 @@ const SearchPanel = ({ isOpen, onClose }) => {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 400, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 overflow-hidden flex flex-col"
+            className="info-panel fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="sticky top-0 flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
+            <div className="info-section sticky top-0 flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
               <h2 className="font-semibold text-gray-800">Search Chat</h2>
               <button
                 onClick={onClose}

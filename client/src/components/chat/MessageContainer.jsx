@@ -71,10 +71,10 @@ const MessageContainer = ({ onReply, wallpaperStyle }) => {
 
         {!isLoadingMessages && messages.length === 0 && (
           <div className="flex flex-col items-center justify-start pt-8 text-center px-4">
-            <div className="w-24 h-24 rounded-full bg-white shadow-soft flex items-center justify-center mb-4">
+            <div className="no-messages-icon w-24 h-24 rounded-full bg-white shadow-soft flex items-center justify-center mb-4">
               <span className="text-4xl">💬</span>
             </div>
-            <p className="text-gray-500 text-sm font-medium">
+            <p className="no-messages-text text-gray-500 text-sm font-medium">
               No messages yet. Say hello!
             </p>
           </div>
@@ -109,7 +109,7 @@ const MessageContainer = ({ onReply, wallpaperStyle }) => {
 
       <button
         onClick={scrollToBottom}
-        className="absolute bottom-4 right-4 p-2.5 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-purple-600 shadow-card transition-all hover:scale-105"
+        className="scroll-bottom-btn absolute bottom-4 right-4 p-2.5 rounded-full bg-white border border-gray-200 text-gray-500 hover:text-purple-600 shadow-card transition-all hover:scale-105"
       >
         <ChevronDown className="w-5 h-5" />
       </button>

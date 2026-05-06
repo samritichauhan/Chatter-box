@@ -13,6 +13,9 @@ const ICE_SERVERS = {
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" },
     { urls: "stun:stun1.l.google.com:19302" },
+    { urls: "stun:stun2.l.google.com:19302" },
+    { urls: "stun:stun3.l.google.com:19302" },
+    { urls: "stun:stun4.l.google.com:19302" },
     // Free TURN servers for relay when direct P2P fails (behind symmetric NATs)
     {
       urls: "turn:openrelay.metered.ca:80",
@@ -29,7 +32,14 @@ const ICE_SERVERS = {
       username: "openrelayproject",
       credential: "openrelayproject",
     },
+    // Additional free TURN servers as fallback
+    {
+      urls: "turn:relay1.expressturn.com:443",
+      username: "efGBITMH0OOWMVI4OD",
+      credential: "YECrkVHCx3SRMYfV",
+    },
   ],
+  iceCandidatePoolSize: 10,
 };
 
 const useCallStore = create((set, get) => ({
@@ -115,8 +125,12 @@ const useCallStore = create((set, get) => ({
       });
 
       peer.on("stream", (remoteStream) => {
-        console.log("[CallStore] Received remote stream");
+        console.log("[CallStore] Received remote stream, tracks:", remoteStream.getTracks().length);
         set({ remoteStream });
+      });
+
+      peer.on("connect", () => {
+        console.log("[CallStore] Peer connection established");
       });
 
       peer.on("error", (err) => {
@@ -195,8 +209,12 @@ const useCallStore = create((set, get) => ({
       });
 
       peer.on("stream", (remoteStream) => {
-        console.log("[CallStore] Received remote stream from initiator");
+        console.log("[CallStore] Received remote stream from initiator, tracks:", remoteStream.getTracks().length);
         set({ remoteStream });
+      });
+
+      peer.on("connect", () => {
+        console.log("[CallStore] Peer connection established (answerer)");
       });
 
       peer.on("error", (err) => {

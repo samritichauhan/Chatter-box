@@ -258,3 +258,259 @@ audio::-webkit-media-controls-enclosure {
   max-width: 100%;
   overflow: hidden;
 }
+
+/* ===== Dark mode overrides for chat area ===== */
+
+/* Chat header */
+.dark .chat-header {
+  background-color: var(--header-bg);
+  border-color: var(--border);
+}
+
+/* Received bubble text in dark mode */
+.dark .bubble-received {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Chat input area */
+.dark .chat-input-area {
+  background-color: var(--bg-secondary);
+  border-color: var(--border);
+}
+
+.dark .chat-input-area textarea {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.dark .chat-input-area textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+.dark .chat-input-area button:not(.bg-gradient-to-r) {
+  color: var(--text-secondary);
+}
+
+.dark .chat-input-area button:not(.bg-gradient-to-r):hover {
+  background-color: rgba(124, 58, 237, 0.15);
+  color: #a78bfa;
+}
+
+/* System message bubble */
+.dark .system-msg {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Deleted message text */
+.dark .deleted-msg {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+}
+
+/* Reaction pills */
+.dark .reaction-pill {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .reaction-pill span {
+  color: var(--text-secondary);
+}
+
+/* Action buttons (reply, react, delete) */
+.dark .msg-action-btn {
+  color: var(--text-secondary);
+}
+
+.dark .msg-action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Quick reaction bar */
+.dark .quick-reaction-bar {
+  background-color: var(--bg-secondary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .quick-reaction-bar .more-btn {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+
+.dark .quick-reaction-bar .more-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Scroll to bottom button */
+.dark .scroll-bottom-btn {
+  background-color: var(--bg-secondary);
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+/* No chat selected empty state */
+.dark .no-chat-bg {
+  background: linear-gradient(to bottom right, #0f0e17, rgba(45, 27, 105, 0.3));
+}
+
+.dark .no-chat-bg h2 {
+  color: var(--text-primary);
+}
+
+.dark .no-chat-bg p {
+  color: var(--text-secondary);
+}
+
+.dark .no-chat-bg .feature-icon {
+  background-color: rgba(124, 58, 237, 0.15);
+}
+
+.dark .no-chat-bg .feature-label {
+  color: var(--text-secondary);
+}
+
+/* No messages empty state */
+.dark .no-messages-icon {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .no-messages-text {
+  color: var(--text-secondary);
+}
+
+/* Date separator */
+.dark .date-separator {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Reply preview */
+.dark .reply-preview {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(124, 58, 237, 0.4);
+  color: var(--text-primary);
+}
+
+.dark .reply-preview .reply-author {
+  color: #a78bfa;
+}
+
+.dark .reply-preview .reply-text {
+  color: var(--text-secondary);
+}
+
+/* Chat header elements */
+.dark .chat-header h3 {
+  color: var(--text-primary);
+}
+
+.dark .chat-header p {
+  color: var(--text-secondary);
+}
+
+.dark .chat-header button {
+  color: var(--text-secondary);
+}
+
+.dark .chat-header button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+/* Dropdown menus */
+.dark .dropdown-menu {
+  background-color: var(--bg-secondary);
+  border-color: var(--border);
+}
+
+.dark .dropdown-menu button {
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.dark .dropdown-menu button:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Contact info / side panels */
+.dark .info-panel {
+  background-color: var(--bg-secondary);
+}
+
+.dark .info-panel h2,
+.dark .info-panel h3,
+.dark .info-panel h4 {
+  color: var(--text-primary);
+}
+
+.dark .info-panel p {
+  color: var(--text-secondary);
+}
+
+.dark .info-panel .detail-icon {
+  background-color: rgba(124, 58, 237, 0.15);
+}
+
+.dark .info-panel .info-section {
+  border-color: var(--border);
+  background-color: var(--bg-secondary);
+}
+
+.dark .info-panel .about-box {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark .info-panel .member-item:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Document link in dark mode */
+.dark .bubble-received a {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark .bubble-received a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Sender name in received messages */
+.dark .sender-name {
+  color: #a78bfa;
+}
+
+/* Search panel results */
+.dark .info-panel .search-result {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--border);
+}
+
+.dark .info-panel .search-result:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .info-panel input {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.dark .info-panel input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Typing indicator in dark mode */
+.dark .typing-bubble {
+  background: linear-gradient(to right, rgba(124, 58, 237, 0.15), rgba(99, 102, 241, 0.15));
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+/* Voice recorder and other overlays */
+.dark .chat-input-area .reply-preview {
+  background-color: rgba(124, 58, 237, 0.1);
+  border-color: rgba(124, 58, 237, 0.3);
+}

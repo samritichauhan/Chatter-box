@@ -7,7 +7,7 @@ export const getConversations = async (req, res) => {
     const conversations = await Conversation.find({
       participants: req.user._id,
     })
-      .populate("participants", "fullName username avatar isOnline lastSeen")
+      .populate("participants", "fullName username avatar isOnline lastSeen email phone")
       .populate("lastMessage")
       .populate("groupAdmin", "fullName username")
       .sort({ updatedAt: -1 });
@@ -26,7 +26,7 @@ export const createOrGetPrivateConversation = async (req, res) => {
       type: "private",
       participants: { $all: [req.user._id, participantId], $size: 2 },
     })
-      .populate("participants", "fullName username avatar isOnline lastSeen")
+      .populate("participants", "fullName username avatar isOnline lastSeen email phone")
       .populate("lastMessage");
 
     if (conversation) return res.json(conversation);
@@ -38,7 +38,7 @@ export const createOrGetPrivateConversation = async (req, res) => {
 
     conversation = await conversation.populate(
       "participants",
-      "fullName username avatar isOnline lastSeen"
+      "fullName username avatar isOnline lastSeen email phone"
     );
 
     res.status(201).json(conversation);
@@ -73,7 +73,7 @@ export const createGroup = async (req, res) => {
     });
 
     conversation = await Conversation.findById(conversation._id)
-      .populate("participants", "fullName username avatar isOnline lastSeen")
+      .populate("participants", "fullName username avatar isOnline lastSeen email phone")
       .populate("groupAdmin", "fullName username");
 
     res.status(201).json(conversation);
@@ -98,7 +98,7 @@ export const updateGroup = async (req, res) => {
       updates,
       { new: true }
     )
-      .populate("participants", "fullName username avatar isOnline lastSeen")
+      .populate("participants", "fullName username avatar isOnline lastSeen email phone")
       .populate("groupAdmin", "fullName username");
 
     res.json(conversation);
@@ -115,7 +115,7 @@ export const addToGroup = async (req, res) => {
       { $addToSet: { participants: userId } },
       { new: true }
     )
-      .populate("participants", "fullName username avatar isOnline lastSeen")
+      .populate("participants", "fullName username avatar isOnline lastSeen email phone")
       .populate("groupAdmin", "fullName username");
 
     res.json(conversation);
@@ -132,7 +132,7 @@ export const removeFromGroup = async (req, res) => {
       { $pull: { participants: userId } },
       { new: true }
     )
-      .populate("participants", "fullName username avatar isOnline lastSeen")
+      .populate("participants", "fullName username avatar isOnline lastSeen email phone")
       .populate("groupAdmin", "fullName username");
 
     res.json(conversation);
@@ -147,6 +147,29 @@ export const leaveGroup = async (req, res) => {
       $pull: { participants: req.user._id },
     });
     res.json({ message: "Left group" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const deleteConversation = async (req, res) => {
+  try {
+    const conversation = await Conversation.findById(req.params.id);
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+
+    // Verify user is a participant
+    if (!conversation.participants.includes(req.user._id)) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // Delete all messages in the conversation
+    await Message.deleteMany({ conversationId: conversation._id });
+    // Delete the conversation
+    await Conversation.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Conversation deleted" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

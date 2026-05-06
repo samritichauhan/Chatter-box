@@ -3,7 +3,7 @@ import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 import toast from "react-hot-toast";
 
-const LoginForm = () => {
+const LoginForm = ({ onForgotPassword }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login, isLoggingIn } = useAuthStore();
@@ -46,6 +46,16 @@ const LoginForm = () => {
           className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
         >
           {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+        </button>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+        >
+          Forgot Password?
         </button>
       </div>
 

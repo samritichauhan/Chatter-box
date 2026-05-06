@@ -120,7 +120,7 @@ const MessageInput = ({ replyTo, onCancelReply }) => {
   };
 
   return (
-    <div className="bg-white border-t border-gray-100">
+    <div className="chat-input-area bg-white border-t border-gray-100">
       {replyTo && !recorderActive && (
         <div className="px-4 pt-2 pb-0 border-b border-gray-100">
           <ReplyPreview message={replyTo} onCancel={onCancelReply} />

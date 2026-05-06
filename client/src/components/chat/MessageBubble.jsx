@@ -38,7 +38,7 @@ const MessageBubble = ({ message, onReply }) => {
   if (isSystem) {
     return (
       <div className="flex justify-center my-3">
-        <span className="px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm text-gray-500 text-xs shadow-sm border border-gray-100">
+        <span className="system-msg px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm text-gray-500 text-xs shadow-sm border border-gray-100">
           {message.content}
         </span>
       </div>
@@ -49,7 +49,7 @@ const MessageBubble = ({ message, onReply }) => {
     return (
       <div className={`flex ${isSent ? "justify-end" : "justify-start"} px-4 my-1`}>
         <div
-          className={`max-w-[70%] px-4 py-2.5 rounded-2xl ${
+          className={`deleted-msg max-w-[70%] px-4 py-2.5 rounded-2xl ${
             isSent ? "bg-purple-100/50 rounded-br-sm" : "bg-gray-100/50 rounded-bl-sm"
           }`}
         >
@@ -183,6 +183,16 @@ const MessageBubble = ({ message, onReply }) => {
         if (!showReactionPicker && !showFullPicker) setShowActions(false);
       }}
     >
+      {/* Sender avatar for received messages */}
+      {!isSent && message.sender && (
+        <div className="flex-shrink-0 mr-2 mt-auto mb-1">
+          <img
+            src={message.sender.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(message.sender.fullName)}&background=7c3aed&color=fff&size=32`}
+            alt={message.sender.fullName}
+            className="w-7 h-7 rounded-full object-cover"
+          />
+        </div>
+      )}
       <div className="relative max-w-[65%] min-w-[120px]">
         {/* Reply preview */}
         {message.replyTo && (
@@ -198,9 +208,9 @@ const MessageBubble = ({ message, onReply }) => {
               : "bubble-received text-gray-800 border border-gray-100/80"
           }`}
         >
-          {/* Sender name in groups */}
+          {/* Sender name */}
           {!isSent && message.sender && (
-            <p className="text-[11px] font-semibold text-purple-600 mb-1 tracking-wide">
+            <p className="sender-name text-[11px] font-semibold text-purple-600 mb-1 tracking-wide">
               {message.sender.fullName}
             </p>
           )}
@@ -243,7 +253,7 @@ const MessageBubble = ({ message, onReply }) => {
               <button
                 key={emoji}
                 onClick={() => handleReact(emoji)}
-                className="px-1.5 py-0.5 rounded-full bg-white border border-gray-200/80 text-xs shadow-sm hover:scale-110 transition-transform"
+                className="reaction-pill px-1.5 py-0.5 rounded-full bg-white border border-gray-200/80 text-xs shadow-sm hover:scale-110 transition-transform"
               >
                 {emoji} {count > 1 && <span className="text-[10px] text-gray-500">{count}</span>}
               </button>
@@ -270,7 +280,7 @@ const MessageBubble = ({ message, onReply }) => {
                     setShowReactionPicker((v) => !v);
                     setShowFullPicker(false);
                   }}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"
+                  className="msg-action-btn p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"
                   title="React"
                 >
                   <span className="text-sm">{"\uD83D\uDE0A"}</span>
@@ -285,7 +295,7 @@ const MessageBubble = ({ message, onReply }) => {
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
                       className={`absolute bottom-full mb-2 z-50 ${isSent ? "right-0" : "left-0"}`}
                     >
-                      <div className="flex items-center gap-1 bg-white rounded-full shadow-xl border border-gray-100 px-2 py-1.5">
+                      <div className="quick-reaction-bar flex items-center gap-1 bg-white rounded-full shadow-xl border border-gray-100 px-2 py-1.5">
                         {QUICK_REACTIONS.map((emoji) => (
                           <motion.button
                             key={emoji}
@@ -299,7 +309,7 @@ const MessageBubble = ({ message, onReply }) => {
                         ))}
                         <button
                           onClick={() => setShowFullPicker((v) => !v)}
-                          className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 text-sm font-bold transition-colors ml-0.5"
+                          className="more-btn w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 text-sm font-bold transition-colors ml-0.5"
                           title="More"
                         >
                           +
@@ -331,7 +341,7 @@ const MessageBubble = ({ message, onReply }) => {
 
               <button
                 onClick={() => onReply(message)}
-                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"
+                className="msg-action-btn p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"
                 title="Reply"
               >
                 <Reply className="w-4 h-4" />
@@ -339,7 +349,7 @@ const MessageBubble = ({ message, onReply }) => {
               {isSent && (
                 <button
                   onClick={() => handleDelete("for_everyone")}
-                  className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+                  className="msg-action-btn p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
                   title="Delete"
                 >
                   <Trash2 className="w-4 h-4" />

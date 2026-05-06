@@ -2,10 +2,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
+import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
 import { MessageSquare } from "lucide-react";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   return (
     <div className="min-h-screen flex items-center justify-center auth-gradient px-4 relative overflow-hidden">
@@ -33,42 +35,52 @@ const AuthPage = () => {
 
         {/* Card */}
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50">
-          {/* Tabs */}
-          <div className="flex mb-7 bg-gray-100 rounded-2xl p-1.5">
-            <button
-              onClick={() => setIsLogin(true)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                isLogin
-                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setIsLogin(false)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                !isLogin
-                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Sign Up
-            </button>
-          </div>
+          {showForgotPassword ? (
+            <ForgotPasswordForm onBack={() => setShowForgotPassword(false)} />
+          ) : (
+            <>
+              {/* Tabs */}
+              <div className="flex mb-7 bg-gray-100 rounded-2xl p-1.5">
+                <button
+                  onClick={() => setIsLogin(true)}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    isLogin
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => setIsLogin(false)}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    !isLogin
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  Sign Up
+                </button>
+              </div>
 
-          {/* Form */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={isLogin ? "login" : "register"}
-              initial={{ opacity: 0, x: isLogin ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isLogin ? 20 : -20 }}
-              transition={{ duration: 0.2 }}
-            >
-              {isLogin ? <LoginForm /> : <RegisterForm />}
-            </motion.div>
-          </AnimatePresence>
+              {/* Form */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isLogin ? "login" : "register"}
+                  initial={{ opacity: 0, x: isLogin ? -20 : 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: isLogin ? 20 : -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isLogin ? (
+                    <LoginForm onForgotPassword={() => setShowForgotPassword(true)} />
+                  ) : (
+                    <RegisterForm />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </>
+          )}
         </div>
 
         <p className="text-center text-indigo-300/60 text-xs mt-6">

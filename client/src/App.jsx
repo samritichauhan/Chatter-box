@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import useAuthStore from "./store/useAuthStore";
 import useTheme from "./hooks/useTheme";
 import { Loader2 } from "lucide-react";
@@ -38,6 +39,7 @@ const App = () => {
           path="/auth"
           element={!user ? <AuthPage /> : <Navigate to="/" replace />}
         />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
